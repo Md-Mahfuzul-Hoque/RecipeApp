@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'controller.dart';
 import 'model.dart';
+import 'details.dart';
 
 class RecipeListApp extends StatelessWidget {
   const RecipeListApp({super.key});
@@ -8,7 +9,6 @@ class RecipeListApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
       debugShowCheckedModeBanner: false,
       title: 'Recipe Viewer',
       theme: ThemeData(
@@ -36,7 +36,6 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
   @override
   void initState() {
     super.initState();
-
     _recipesFuture = _controller.fetchRecipes();
   }
 
@@ -52,7 +51,6 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
       body: FutureBuilder<List<Recipe>>(
         future: _recipesFuture,
         builder: (context, snapshot) {
-
           if (snapshot.connectionState == ConnectionState.waiting || _recipesFuture == null) {
             return const Center(
               child: Column(
@@ -67,7 +65,6 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
           }
 
           if (snapshot.hasError) {
-
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
@@ -88,16 +85,13 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
             );
           }
 
-
           final List<Recipe> recipes = snapshot.data ?? [];
 
           if (recipes.isEmpty) {
-
             return const Center(
               child: Text('No recipes found.', style: TextStyle(color: Colors.grey, fontSize: 18)),
             );
           }
-
 
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -136,8 +130,11 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
                     ),
                     trailing: const Icon(Icons.ramen_dining, color: Colors.teal),
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Viewing details for: ${recipe.title}')),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecipeDetailScreen(recipe: recipe),
+                        ),
                       );
                     },
                   ),
